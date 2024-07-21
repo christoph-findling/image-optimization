@@ -25,8 +25,8 @@ import { getOriginShieldRegion } from "./origin-shield";
 // related to architecture. If set to false, transformed images are not stored in S3, and all image requests land on Lambda
 var STORE_TRANSFORMED_IMAGES = "true";
 // Parameters of S3 bucket where original images are stored
-var S3_IMAGE_BUCKET_NAME = "OriginalImagesBucket";
-var S3_IMAGE_BUCKET_NAME_TRANSFORMED = "TransformedImagesBucket";
+var S3_IMAGE_BUCKET_NAME = "original-images-bucket";
+var S3_IMAGE_BUCKET_NAME_TRANSFORMED = "transformed-images-bucket";
 // CloudFront parameters
 var CLOUDFRONT_ORIGIN_SHIELD_REGION = getOriginShieldRegion(
   process.env.AWS_REGION || process.env.CDK_DEFAULT_REGION || "us-east-1"
