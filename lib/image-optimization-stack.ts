@@ -122,17 +122,17 @@ export class ImageOptimizationStack extends Stack {
     var originalImageBucket;
     var transformedImageBucket;
 
-    if (S3_IMAGE_BUCKET_NAME) {
-      originalImageBucket = s3.Bucket.fromBucketName(
-        this,
-        "imported-original-image-bucket",
-        S3_IMAGE_BUCKET_NAME
-      );
-      new CfnOutput(this, "PublicImagesS3Bucket", {
-        description: "S3 bucket where original images are stored",
-        value: originalImageBucket.bucketName,
-      });
-    } /* else {
+    // if (S3_IMAGE_BUCKET_NAME) {
+    originalImageBucket = s3.Bucket.fromBucketName(
+      this,
+      "imported-original-image-bucket",
+      S3_IMAGE_BUCKET_NAME
+    );
+    new CfnOutput(this, "PublicImagesS3BucketProd", {
+      description: "S3 bucket where original images are stored",
+      value: originalImageBucket.bucketName,
+    });
+    /* }  else {
       originalImageBucket = new s3.Bucket(this, 's3-sample-original-image-bucket', {
         removalPolicy: RemovalPolicy.DESTROY,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
