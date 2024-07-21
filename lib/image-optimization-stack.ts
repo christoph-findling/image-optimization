@@ -75,8 +75,10 @@ export class ImageOptimizationStack extends Stack {
       S3_TRANSFORMED_IMAGE_CACHE_TTL;
     S3_IMAGE_BUCKET_NAME =
       this.node.tryGetContext("S3_IMAGE_BUCKET_NAME") || S3_IMAGE_BUCKET_NAME;
-    S3_IMAGE_BUCKET_NAME_TRANSFORMED = S3_IMAGE_BUCKET_NAME
-      ? S3_IMAGE_BUCKET_NAME + "-transformed"
+    S3_IMAGE_BUCKET_NAME_TRANSFORMED = this.node.tryGetContext(
+      "S3_IMAGE_BUCKET_NAME"
+    )
+      ? this.node.tryGetContext("S3_IMAGE_BUCKET_NAME") + "-transformed"
       : S3_IMAGE_BUCKET_NAME_TRANSFORMED;
     CLOUDFRONT_ORIGIN_SHIELD_REGION =
       this.node.tryGetContext("CLOUDFRONT_ORIGIN_SHIELD_REGION") ||
