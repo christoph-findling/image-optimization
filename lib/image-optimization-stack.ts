@@ -126,34 +126,38 @@ export class ImageOptimizationStack extends Stack {
     var originalImageBucket;
     var transformedImageBucket;
 
-    // if (S3_IMAGE_BUCKET_NAME) {
-    originalImageBucket = s3.Bucket.fromBucketName(
-      this,
-      "imported-original-image-bucket",
-      S3_IMAGE_BUCKET_NAME
-    );
-    new CfnOutput(this, "PublicImagesS3BucketProd", {
-      description: "S3 bucket where original images are stored",
-      value: originalImageBucket.bucketName,
-    });
-    /* }  else {
-      originalImageBucket = new s3.Bucket(this, 's3-sample-original-image-bucket', {
-        removalPolicy: RemovalPolicy.DESTROY,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        encryption: s3.BucketEncryption.S3_MANAGED,
-        enforceSSL: true,
-        autoDeleteObjects: true,
+    if (S3_IMAGE_BUCKET_NAME) {
+      originalImageBucket = s3.Bucket.fromBucketName(
+        this,
+        "imported-original-image-bucket",
+        S3_IMAGE_BUCKET_NAME
+      );
+      new CfnOutput(this, "PublicImagesS3BucketProd", {
+        description: "S3 bucket where original images are stored",
+        value: originalImageBucket.bucketName,
       });
-      new s3deploy.BucketDeployment(this, 'DeployWebsite', {
-        sources: [s3deploy.Source.asset('./image-sample')],
+    } else {
+      originalImageBucket = new s3.Bucket(
+        this,
+        "s3-sample-original-image-bucket",
+        {
+          removalPolicy: RemovalPolicy.DESTROY,
+          blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+          encryption: s3.BucketEncryption.S3_MANAGED,
+          enforceSSL: true,
+          autoDeleteObjects: true,
+        }
+      );
+      new s3deploy.BucketDeployment(this, "DeployWebsite", {
+        sources: [s3deploy.Source.asset("./image-sample")],
         destinationBucket: originalImageBucket,
-        destinationKeyPrefix: 'images/rio/',
+        destinationKeyPrefix: "images/rio/",
       });
-      new CfnOutput(this, 'PublicImagesS3Bucket' + DEPLOYMENT_SUFFIX, {
-        description: 'S3 bucket where original images are stored',
-        value: originalImageBucket.bucketName
+      new CfnOutput(this, "PublicImagesS3Bucket", {
+        description: "S3 bucket where original images are stored",
+        value: originalImageBucket.bucketName,
       });
-    } */
+    }
 
     // create bucket for transformed images if enabled in the architecture
     if (STORE_TRANSFORMED_IMAGES === "true") {
