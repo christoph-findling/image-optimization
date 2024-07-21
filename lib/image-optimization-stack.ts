@@ -25,8 +25,8 @@ import { getOriginShieldRegion } from "./origin-shield";
 // related to architecture. If set to false, transformed images are not stored in S3, and all image requests land on Lambda
 var STORE_TRANSFORMED_IMAGES = "true";
 // Parameters of S3 bucket where original images are stored
-var S3_IMAGE_BUCKET_NAME: string;
-var S3_IMAGE_BUCKET_NAME_TRANSFORMED: string;
+var S3_IMAGE_BUCKET_NAME = "OriginalImagesBucket";
+var S3_IMAGE_BUCKET_NAME_TRANSFORMED = "TransformedImagesBucket";
 // CloudFront parameters
 var CLOUDFRONT_ORIGIN_SHIELD_REGION = getOriginShieldRegion(
   process.env.AWS_REGION || process.env.CDK_DEFAULT_REGION || "us-east-1"
@@ -126,17 +126,17 @@ export class ImageOptimizationStack extends Stack {
     var originalImageBucket;
     var transformedImageBucket;
 
-    if (S3_IMAGE_BUCKET_NAME) {
-      originalImageBucket = s3.Bucket.fromBucketName(
-        this,
-        "imported-original-image-bucket",
-        S3_IMAGE_BUCKET_NAME
-      );
-      new CfnOutput(this, "PublicImagesS3BucketProd", {
-        description: "S3 bucket where original images are stored",
-        value: originalImageBucket.bucketName,
-      });
-    } else {
+    // if (S3_IMAGE_BUCKET_NAME) {
+    originalImageBucket = s3.Bucket.fromBucketName(
+      this,
+      "imported-original-image-bucket",
+      S3_IMAGE_BUCKET_NAME
+    );
+    new CfnOutput(this, "PublicImagesS3BucketProd", {
+      description: "S3 bucket where original images are stored",
+      value: originalImageBucket.bucketName,
+    });
+    /* } else {
       originalImageBucket = new s3.Bucket(
         this,
         "s3-sample-original-image-bucket",
@@ -157,7 +157,7 @@ export class ImageOptimizationStack extends Stack {
         description: "S3 bucket where original images are stored",
         value: originalImageBucket.bucketName,
       });
-    }
+    } */
 
     // create bucket for transformed images if enabled in the architecture
     if (STORE_TRANSFORMED_IMAGES === "true") {
